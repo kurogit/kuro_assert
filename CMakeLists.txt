@@ -23,12 +23,15 @@ add_library(${PROJECT_NAME} ${kuro_assert_HEADERS} ${kuro_assert_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_compile_features(${PROJECT_NAME} PUBLIC
                                           cxx_strong_enums
-                                          cxx_noexcept)
+                                          cxx_noexcept
+                                          cxx_nullptr
+                                          cxx_auto_type)
 
 # Warnings
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(enabled_warnings -Weverything -Werror -pedantic-errors)
-    set(disabled_warnings -Wno-c++98-compat)
+    set(disabled_warnings -Wno-c++98-compat
+                          -Wno-padded)
 endif()
 target_compile_options(${PROJECT_NAME} PRIVATE ${enabled_warnings} ${disabled_warnings})
 
