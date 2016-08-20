@@ -2,5 +2,4 @@
 
 namespace kuro
 {
-
 }  // namespace kuro
