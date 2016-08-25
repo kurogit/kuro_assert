@@ -17,7 +17,7 @@ TEST_CASE("test_contract_assertion_mode")
     (void)m;
 }
 
-TEST_CASE("test_contract_violation_info")
+TEST_CASE("test exitance of members in contract_violation_info")
 {
     using kuro::contract_violation_info;
 
@@ -30,7 +30,7 @@ TEST_CASE("test_contract_violation_info")
     (void)info;
 }
 
-TEST_CASE("test_contract_violation_handler_matches_specification")
+TEST_CASE("test that contract_violation_handler matches the specification")
 {
     using kuro::contract_violation_handler;
     using kuro::contract_violation_info;
@@ -38,14 +38,14 @@ TEST_CASE("test_contract_violation_handler_matches_specification")
     CHECK((std::is_same<kuro::contract_violation_handler, void (*)(const contract_violation_info&)>::value));
 }
 
-void test_handler(kuro::contract_violation_info const&)
+void test_handler(kuro::contract_violation_info const& /*unused*/)
 {
 }
-void test_handler_2(kuro::contract_violation_info const&)
+void test_handler_2(kuro::contract_violation_info const& /*unused*/)
 {
 }
 
-TEST_CASE("test_set_and_get_contract_violation_handler")
+TEST_CASE("test set_ and get_contract_violation_handler")
 {
     using kuro::get_contract_violation_handler;
     using kuro::set_contract_violation_handler;
@@ -53,15 +53,40 @@ TEST_CASE("test_set_and_get_contract_violation_handler")
     // calling get_contract_violation_handler first, returns nullptr
     CHECK_FALSE(get_contract_violation_handler());
 
-    // Setting the first handler return nullptr
+    // Setting the first handler returns nullptr
     CHECK_FALSE(set_contract_violation_handler(&test_handler));
 
     // After setting a handler it should be returned
     CHECK(get_contract_violation_handler() == &test_handler);
 
-    // If another handler is set the previous one should be retuerned
+    // If another handler is set the previous one should be returned
     CHECK(set_contract_violation_handler(&test_handler_2) == &test_handler);
 
     // And returned again
     CHECK(get_contract_violation_handler() == &test_handler_2);
 }
+
+namespace testns_handler
+{
+
+int errCount = 0;
+
+void testHandler(const kuro::contract_violation_info& /*unused*/)
+{
+    ++errCount;
+}
+
+TEST_CASE("test a previously set contract violation handler")
+{
+    kuro::set_contract_violation_handler(&testHandler);
+
+    REQUIRE(errCount == 0);
+
+    kuro::contract_violation_info info = {kuro::contract_assertion_mode::test, "just a test", __FILE__, __LINE__};
+
+    kuro::handle_contract_violation(info);
+
+    REQUIRE(errCount == 1);
+}
+
+}  // namespace testns_handler

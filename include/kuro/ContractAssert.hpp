@@ -31,12 +31,14 @@ struct contract_violation_info
 };
 
 //! Type of a contract violation handler.
-using contract_violation_handler = void (*) (contract_violation_info const& info);
+using contract_violation_handler = void (*)(contract_violation_info const& info);
 
 //! Return the current contract violation handler or nullptr if none was set and the default handler is used.
 contract_violation_handler get_contract_violation_handler() noexcept;
 
 //! Set the contract violation handler and return the previous one or nullptr of the previous one is the default handler.
 contract_violation_handler set_contract_violation_handler(contract_violation_handler handler) noexcept;
+
+void handle_contract_violation(const contract_violation_info& info);
 
 }  // namespace kuro
