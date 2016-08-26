@@ -82,6 +82,19 @@ void contract_assert_unit_test_handler(const contract_violation_info& /*unused*/
     set_contract_assert_unit_test_status(true);
 }
 
+void contract_assert_unit_test_opt_handler(const kuro::contract_violation_info& info)
+{
+    violationHappened = info.mode == contract_assertion_mode::opt;
+}
+void contract_assert_unit_test_test_handler(const kuro::contract_violation_info& info)
+{
+    violationHappened = info.mode == contract_assertion_mode::test;
+}
+void contract_assert_unit_test_safe_handler(const kuro::contract_violation_info& info)
+{
+    violationHappened = info.mode == contract_assertion_mode::safe;
+}
+
 }  // namespace detail
 
 }  // namespace kuro
