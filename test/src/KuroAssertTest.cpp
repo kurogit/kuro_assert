@@ -64,7 +64,20 @@ TEST_CASE("test set_ and get_contract_violation_handler")
 
     // And returned again
     CHECK(get_contract_violation_handler() == &test_handler_2);
+    
+    // Reset handler
+    set_contract_violation_handler(nullptr);
 }
+
+/*
+// Not testable because of abort
+TEST_CASE("test default")
+{
+    kuro::contract_violation_info info = {kuro::contract_assertion_mode::test, "just a test", __FILE__, __LINE__};
+
+    kuro::handle_contract_violation(info);
+}
+*/
 
 namespace testns_handler
 {
@@ -87,6 +100,9 @@ TEST_CASE("test a previously set contract violation handler")
     kuro::handle_contract_violation(info);
 
     REQUIRE(errCount == 1);
+    
+    // Reset handler
+    kuro::set_contract_violation_handler(nullptr);
 }
 
 }  // namespace testns_handler
