@@ -73,9 +73,7 @@ TEST_CASE("test set_ and get_contract_violation_handler")
 // Not testable because of abort
 TEST_CASE("test default")
 {
-    kuro::contract_violation_info info = {kuro::contract_assertion_mode::test, "just a test", __FILE__, __LINE__};
-
-    kuro::handle_contract_violation(info);
+    kuro_contract_assert(42 == 1);
 }
 */
 
@@ -112,8 +110,7 @@ struct Test_contract_assert_pass_fixture
     }
     void testFail()
     {
-        kuro::contract_violation_info info = {kuro::contract_assertion_mode::test, "just a test", __FILE__, __LINE__};
-        kuro::handle_contract_violation(info);
+        kuro_contract_assert(42 == 1);
     }
 };
 TEST_CASE_FIXTURE(Test_contract_assert_pass_fixture, "test contract_assert_pass")

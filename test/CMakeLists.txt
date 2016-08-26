@@ -10,6 +10,8 @@ target_include_directories(general_test PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/incl
 target_link_libraries(general_test PRIVATE ${PROJECT_NAME})
 add_test(NAME general_test COMMAND general_test)
 
+# All of the follwoing tests differ in the value of KURO_ASSERT_ASSERTION_MODE
+
 add_executable(test_mode_none src/KuroAssertTestModes.hpp src/KuroAssertTestModeNone.cpp)
 target_include_directories(test_mode_none PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/include)
 target_link_libraries(test_mode_none PRIVATE ${PROJECT_NAME})

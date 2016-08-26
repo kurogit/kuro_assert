@@ -15,9 +15,8 @@ contract_violation_handler globalHandler = nullptr;
 [[noreturn]] void defaultHandler(const contract_violation_info& info)
 {
     std::cerr << "Contract violation detected!\n"
-              << "file: " << info.filename << "\n"
-              << "line: " << info.line_number << "\n"
-              << "failed check: " << info.expression_test << "\n\n";
+              << "\tlocation: " << info.filename << ":" << info.line_number << "\n"
+              << "\tfailed check: " << info.expression_test << "\n\n";
 
     std::abort();
 }

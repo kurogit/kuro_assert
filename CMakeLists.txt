@@ -13,14 +13,11 @@ option(KURO_ASSERT_BUILD_TESTING "Build unit tests" OFF)
 set(kuro_assert_HEADERS "include/kuro/ContractAssert.hpp")
 set(kuro_assert_SOURCES "src/ContractAssert.cpp")
 
-# Config for YouCompleteMe
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/.ycm_extra_conf.py.in"
-               "${CMAKE_CURRENT_SOURCE_DIR}/.ycm_extra_conf.py"
-               @ONLY)
-
 set(BUILD_SHARED_LIBS ${KURO_ASSERT_BUILD_SHARED})
+
 add_library(${PROJECT_NAME} ${kuro_assert_HEADERS} ${kuro_assert_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+# Let CMake handle the correct std flag
 target_compile_features(${PROJECT_NAME} PUBLIC
                                           cxx_strong_enums
                                           cxx_noexcept
