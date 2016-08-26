@@ -39,6 +39,20 @@ contract_violation_handler get_contract_violation_handler() noexcept;
 //! Set the contract violation handler and return the previous one or nullptr of the previous one is the default handler.
 contract_violation_handler set_contract_violation_handler(contract_violation_handler handler) noexcept;
 
+//! Handle the contract violation. Calls the current violation handler.
 void handle_contract_violation(const contract_violation_info& info);
+
+//! Some extensions not defined in N4253
+inline namespace ext
+{
+    class scoped_contract_violation_handler
+    {
+    public:
+       explicit scoped_contract_violation_handler(contract_violation_handler handler) noexcept;
+       ~scoped_contract_violation_handler() noexcept;
+    private:
+        contract_violation_handler savedHandler_;
+    };
+}  // namespace ext
 
 }  // namespace kuro

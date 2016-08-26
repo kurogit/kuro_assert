@@ -91,7 +91,7 @@ void testHandler(const kuro::contract_violation_info& /*unused*/)
 
 TEST_CASE("test a previously set contract violation handler")
 {
-    kuro::set_contract_violation_handler(&testHandler);
+    kuro::scoped_contract_violation_handler h{&testHandler};
 
     REQUIRE(errCount == 0);
 
@@ -100,9 +100,5 @@ TEST_CASE("test a previously set contract violation handler")
     kuro::handle_contract_violation(info);
 
     REQUIRE(errCount == 1);
-    
-    // Reset handler
-    kuro::set_contract_violation_handler(nullptr);
-}
-
+} 
 }  // namespace testns_handler

@@ -50,5 +50,18 @@ void handle_contract_violation(const contract_violation_info& info)
     }
 }
 
+inline namespace ext
+{
+scoped_contract_violation_handler::scoped_contract_violation_handler(contract_violation_handler handler) noexcept 
+    : savedHandler_{get_contract_violation_handler()}
+{
+    set_contract_violation_handler(handler);
+}
+scoped_contract_violation_handler::~scoped_contract_violation_handler() noexcept
+{
+    set_contract_violation_handler(savedHandler_);
+}
+
+} // namespace ext
 
 }  // namespace kuro

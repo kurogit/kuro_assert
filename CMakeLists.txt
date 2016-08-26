@@ -25,8 +25,9 @@ target_compile_features(${PROJECT_NAME} PUBLIC
                                           cxx_strong_enums
                                           cxx_noexcept
                                           cxx_nullptr
-                                          cxx_auto_type)
-
+                                          cxx_auto_type
+                                          cxx_inline_namespaces
+                                          cxx_uniform_initialization)
 # Warnings
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(enabled_warnings -Weverything -Werror -pedantic-errors)
