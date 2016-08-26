@@ -64,7 +64,7 @@ TEST_CASE("test set_ and get_contract_violation_handler")
 
     // And returned again
     CHECK(get_contract_violation_handler() == &test_handler_2);
-    
+
     // Reset handler
     set_contract_violation_handler(nullptr);
 }
@@ -100,5 +100,30 @@ TEST_CASE("test a previously set contract violation handler")
     kuro::handle_contract_violation(info);
 
     REQUIRE(errCount == 1);
-} 
+}
+
 }  // namespace testns_handler
+
+struct Test_contract_assert_pass_fixture
+{
+    void testPass()
+    {
+        // Nothing
+    }
+    void testFail()
+    {
+        kuro::contract_violation_info info = {kuro::contract_assertion_mode::test, "just a test", __FILE__, __LINE__};
+        kuro::handle_contract_violation(info);
+    }
+};
+TEST_CASE_FIXTURE(Test_contract_assert_pass_fixture, "test contract_assert_pass")
+{
+    // Check that the default handler is active.
+    REQUIRE_FALSE(kuro::get_contract_violation_handler());
+
+    CHECK(kuro_contract_assert_pass(testPass()));
+    CHECK_FALSE(kuro_contract_assert_pass(testFail()));
+
+    // Check that the default handler is active again.
+    REQUIRE_FALSE(kuro::get_contract_violation_handler());
+}

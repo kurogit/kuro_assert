@@ -18,7 +18,7 @@ contract_violation_handler globalHandler = nullptr;
               << "file: " << info.filename << "\n"
               << "line: " << info.line_number << "\n"
               << "failed check: " << info.expression_test << "\n\n";
-              
+
     std::abort();
 }
 
@@ -52,7 +52,7 @@ void handle_contract_violation(const contract_violation_info& info)
 
 inline namespace ext
 {
-scoped_contract_violation_handler::scoped_contract_violation_handler(contract_violation_handler handler) noexcept 
+scoped_contract_violation_handler::scoped_contract_violation_handler(contract_violation_handler handler) noexcept
     : savedHandler_{get_contract_violation_handler()}
 {
     set_contract_violation_handler(handler);
@@ -62,6 +62,26 @@ scoped_contract_violation_handler::~scoped_contract_violation_handler() noexcept
     set_contract_violation_handler(savedHandler_);
 }
 
-} // namespace ext
+}  // namespace ext
+
+namespace detail
+{
+
+static bool violationHappened = false;
+
+void set_contract_assert_unit_test_status(bool status) noexcept
+{
+    violationHappened = status;
+}
+bool get_contract_assert_unit_test_status() noexcept
+{
+    return violationHappened;
+}
+void contract_assert_unit_test_handler(const contract_violation_info& /*unused*/)
+{
+    set_contract_assert_unit_test_status(true);
+}
+
+}  // namespace detail
 
 }  // namespace kuro
