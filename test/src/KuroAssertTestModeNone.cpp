@@ -1,3 +1,8 @@
+/*!
+ * \file
+ * \details This file is part of https://github.com/kurogit/kuro_assert which is licensed under the MIT License.
+ * \copyright 2016 Patrick Schwartz <kurogit@schwartzm.com>
+ */
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 

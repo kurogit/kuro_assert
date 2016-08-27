@@ -1,3 +1,7 @@
+#
+# This file is part of https://github.com/kurogit/kuro_assert which is licensed under the MIT License.
+# Copyright 2016 Patrick Schwartz <kurogit@schwartzm.com>
+#
 
 # Get doctest
 file(DOWNLOAD 
