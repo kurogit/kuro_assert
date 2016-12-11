@@ -21,7 +21,7 @@ set(kuro_assert_SOURCES "src/ContractAssert.cpp")
 set(BUILD_SHARED_LIBS ${KURO_ASSERT_BUILD_SHARED})
 
 add_library(${PROJECT_NAME} ${kuro_assert_HEADERS} ${kuro_assert_SOURCES})
-target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>" "$<INSTALL_INTERFACE:include>")
 # Let CMake handle the correct std flag
 target_compile_features(${PROJECT_NAME} PUBLIC
                                           cxx_strong_enums
@@ -43,3 +43,55 @@ if(${KURO_ASSERT_BUILD_TESTING})
     # Add unit tests using doctest
     add_subdirectory(test)
 endif()
+
+
+set(config_install_dir "lib/cmake/${PROJECT_NAME}")
+set(include_install_dir "include/kuro")
+
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+
+# Configuration
+set(version_config "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
+set(project_config "${generated_dir}/${PROJECT_NAME}Config.cmake")
+set(targets_export_name "${PROJECT_NAME}Targets")
+set(namespace "kuro::")
+
+include(CMakePackageConfigHelpers)
+
+# Configure '<PROJECT-NAME>ConfigVersion.cmake'
+# Note: PROJECT_VERSION is used as a VERSION
+write_basic_package_version_file(
+    "${version_config}" COMPATIBILITY SameMajorVersion
+)
+
+# Configure '<PROJECT-NAME>Config.cmake'
+# Use variables:
+#   * targets_export_name
+#   * PROJECT_NAME
+configure_package_config_file(
+    "cmake/Config.cmake.in"
+    "${project_config}"
+    INSTALL_DESTINATION "${config_install_dir}"
+)
+
+install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT "${targets_export_name}"
+    LIBRARY DESTINATION "lib"
+    ARCHIVE DESTINATION "lib"
+    RUNTIME DESTINATION "bin"
+    INCLUDES DESTINATION "${include_install_dir}"
+)
+install(
+    FILES "${kuro_assert_HEADERS}"
+    DESTINATION "${include_install_dir}"
+)
+install(
+    FILES "${project_config}" "${version_config}"
+    DESTINATION "${config_install_dir}"
+)
+install(
+    EXPORT "${targets_export_name}"
+    NAMESPACE "${namespace}"
+    DESTINATION "${config_install_dir}"
+)
